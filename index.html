@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Académique : Télémétrie Systémique et Supervision d'Infrastructure</title>
+    <!-- Intégration de Mermaid pour les diagrammes -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme:'neutral'});</script>
+    <!-- Styles CSS -->
+    <style>
+        /* Définition des polices et variables */
+        :root {
+            --color-primary: #1a365d;
+            --color-secondary: #2d3748;
+            --color-accent: #2b6cb0;
+            --color-law: #c53030;
+            --color-illusion: #b7791f;
+            --color-background: #ffffff;
+            --color-surface: #f7fafc;
+            --color-border: #e2e8f0;
+            --font-heading: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+            --font-body: 'Source Sans 3', 'Inter', 'Open Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-secondary);
+            background-color: var(--color-background);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        /* Header */
+        .page-header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--color-accent);
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation principale */
+        #main-nav {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--color-secondary);
+            font-weight: 600;
+            padding: 1rem 0;
+            display: block;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover, .nav-menu a:focus {
+            color: var(--color-accent);
+        }
+
+        .nav-menu a.active {
+            color: var(--color-accent);
+            border-bottom: 3px solid var(--color-accent);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        /* Contenu principal en deux colonnes */
+        .main-wrapper {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Sidebar / Navigation latérale */
+        #sidebar {
+            width: 280px;
+            background-color: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            color: var(--color-secondary);
+            transition: all 0.2s;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a:focus, .sidebar-nav a.active-section {
+            background-color: rgba(43, 108, 176, 0.1);
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        /* Zone de contenu principal */
+        #content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .module-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 100px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        /* Styles typographiques spécifiques */
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--color-secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Éléments de mise en forme sémantique */
+        .analogy-box {
+            background-color: rgba(247, 250, 252, 0.8);
+            border-left: 4px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .concept-key {
+            color: var(--color-accent);
+            font-weight: 700;
+            background-color: rgba(43, 108, 176, 0.1);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .law-box {
+            background-color: rgba(197, 48, 48, 0.05);
+            border-left: 4px solid var(--color-law);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .illusion-box {
+            background-color: rgba(183, 121, 31, 0.05);
+            border-left: 4px solid var(--color-illusion);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .equation-box {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background-color: var(--color-surface);
+            border-radius: 8px;
+            border: 1px dashed var(--color-border);
+        }
+
+        .mermaid-diagram {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: white;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .warning-box {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        pre, .command {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+        }
+
+        .cognitive-objectives {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            margin: 3rem 0;
+        }
+
+        .cognitive-objectives h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .cognitive-objectives ul {
+            list-style: none;
+            padding-left: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cognitive-objectives li {
+            margin-bottom: 1rem;
+            padding-left: 1.8rem;
+            position: relative;
+        }
+
+        .cognitive-objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #68d391;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .page-footer {
+            background-color: var(--color-primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                position: static;
+                top: auto;
+                max-height: none;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--color-surface);
+                flex-direction: column;
+                padding: 1rem;
+                border-top: 1px solid var(--color-border);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu li {
+                width: 100%;
+            }
+
+            .module-section {
+                padding: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media print {
+            #main-nav, #sidebar, .page-footer, .hamburger {
+                display: none;
+            }
+
+            .main-wrapper {
+                flex-direction: column;
+            }
+
+            #content {
+                padding: 0;
+            }
+
+            .module-section {
+                border: none;
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>📘 Module Académique : Télémétrie Systémique et Supervision d'Infrastructure</h1>
+        <p class="subtitle">Reconstruction académique ultra-approfondie — Maîtrise complète de la supervision IT (SNMP, Syslog, Netflow, Centreon, KPI, Tableaux de bord)</p>
+    </header>
+
+    <nav id="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">📊 Supervision Globale</div>
+            <div class="hamburger" id="hamburger-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu" id="main-menu">
+                <li><a href="#analogie" class="active">Analogie Maître</a></li>
+                <li><a href="#modele-mental">Modèle Mental</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#mecanismes">Mécanismes</a></li>
+                <li><a href="#protocoles">Protocoles & Outils</a></li>
+                <li><a href="#illusions">Illusions Conceptuelles</a></li>
+                <li><a href="#raisonnement">Raisonnement</a></li>
+                <li><a href="#synthese">Synthèse</a></li>
+                <li><a href="#extension">Extension</a></li>
+                <li><a href="#objectifs">Objectifs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside id="sidebar">
+            <div class="sidebar-title">Navigation du Module</div>
+            <ul class="sidebar-nav">
+                <li><a href="#analogie" class="active-section">🧠 Analogie Systémique Maître</a></li>
+                <li><a href="#modele-mental">🧩 Modèle Mental Global</a></li>
+                <li><a href="#architecture">1️⃣ Architecture Conceptuelle Fondamentale</a></li>
+                <li><a href="#mecanismes">2️⃣ Mécanismes Internes Détaillés</a>
+                    <ul style="margin-left: 1rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                        <li><a href="#mecanisme-snmp">SNMP Requêtes</a></li>
+                        <li><a href="#mecanisme-traps">Traps SNMP</a></li>
+                        <li><a href="#mecanisme-soft-hard">États SOFT/HARD</a></li>
+                        <li><a href="#mecanisme-flapping">Flapping</a></li>
+                        <li><a href="#mecanisme-parents">Dépendances Parents-Enfants</a></li>
+                    </ul>
+                </li>
+                <li><a href="#protocoles">3️⃣ Protocoles, Standards & Outils</a></li>
+                <li><a href="#illusions">4️⃣ Illusions Conceptuelles & Pièges</a></li>
+                <li><a href="#raisonnement">5️⃣ Raisonnement de l'Expert Senior</a></li>
+                <li><a href="#synthese">6️⃣ Synthèse Mémorisable Long Terme</a></li>
+                <li><a href="#extension">7️⃣ Extension Au-delà du Corpus (500%+)</a></li>
+                <li><a href="#objectifs">🎯 Objectifs Cognitifs Finaux</a></li>
+            </ul>
+        </aside>
+
+        <main id="content">
+            <!-- Section Analogie -->
+            <section id="analogie" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Analogie Centrale</span>
+                    <h2>🧠 Analogie Systémique Maître — Le Système Immunitaire Numérique</h2>
+                </div>
+                <p>L'infrastructure informatique est un <span class="concept-key">organisme vivant</span> ; la supervision en est le <span class="concept-key">système immunitaire et nerveux central</span>.</p>
+                <div class="analogy-box">
+                    <p><strong>Organisme vivant</strong> → Infrastructure complète : serveurs, routeurs, switchs, firewalls, imprimantes, caméras IP.</p>
+                    <p><strong>Système nerveux central</strong> → Plateforme de supervision (Centreon, Nagios, Zabbix).</p>
+                    <p><strong>Capteurs nerveux périphériques</strong> → Agents SNMP, sondes (scripts SH, Perl, Python).</p>
+                    <p><strong>Messages de douleur</strong> → Alertes (Warning, Critical), Traps SNMP, messages Syslog.</p>
+                    <p><strong>Anticorps et globules blancs</strong> → Processus automatisés de remédiation, reconfiguration.</p>
+                    <p><strong>Bilan de santé périodique</strong> → Collecte SNMP par requêtes (Get, GetBulk).</p>
+                    <p><strong>Système immunitaire inné</strong> → Seuils d'alerte statiques, règles de détection immédiate.</p>
+                    <p><strong>Système immunitaire acquis</strong> → Analyse des tendances, corrélation, apprentissage des patterns.</p>
+                    <p><strong>Fièvre systémique</strong> → État "Critical" généralisé, impact visible sur plusieurs services.</p>
+                    <p><strong>Inflammation locale</strong> → Alerte sur un service spécifique (CPU, mémoire, disque).</p>
+                    <p><strong>Mémoire immunitaire (vaccination)</strong> → Analyse post-mortem, planification préventive, mise à niveau planifiée.</p>
+                    <p><strong>Détection de pathogène inconnu</strong> → Détection d'anomalie par flapping, comportement inédit.</p>
+                    <p><strong>Réaction allergique (fausse alerte)</strong> → Notification intempestive due à un seuil mal calibré.</p>
+                    <p><strong>Choc septique (défaillance en cascade)</strong> → Effet domino : panne réseau entraînant des "UNREACHABLE" massifs.</p>
+                    <p><strong>Journal médical</strong> → Centralisation des logs (Syslog, ELK, Splunk, Graylog).</p>
+                    <p><strong>Indicateurs de santé publique</strong> → KPI, MTBF, MTRS, taux de disponibilité, CSAT, NPS.</p>
+                    <p><strong>Tableau de bord hospitalier</strong> → Tableaux de bord Centreon, widgets, vues personnalisées.</p>
+                </div>
+                <p><strong>Loi fondamentale</strong> : La supervision ne crée pas la santé de l'infrastructure — elle la révèle, l'anticipe et guide l'action.</p>
+            </section>
+
+            <!-- Section Modèle Mental -->
+            <section id="modele-mental" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Schéma Directeur</span>
+                    <h2>🧩 Modèle Mental Global du Système</h2>
+                </div>
+                <div class="mermaid-diagram">
+                    <div class="mermaid">
+graph TD
+    A[Hôte supervisé<br/>Linux/Windows/Router/Switch] -->|SNMP Get/GetBulk<br/>UDP 161| B[Agent SNMP]
+    A -->|SNMP Trap<br/>UDP 162| B
+    A -->|Syslog UDP 514| C[Serveur Syslog]
+    A -->|Netflow/sFlow/IPFIX<br/>UDP 2055| D[Collecteur de flux]
+    
+    B -->|Réseau| E[Pollers Centreon]
+    C -->|Messages centralisés| E
+    D -->|Métadonnées flux| E
+    
+    E -->|Stockage| F[Base de données<br/>partitionnée]
+    E -->|Moteur centengine| G{Seuils<br/>dépassés?}
+    
+    G -->|Oui - premier constat| H[État SOFT<br/>Max Check Attempts]
+    G -->|Non| J[État OK]
+    
+    H -->|Vérification 1| K{État persistant?}
+    K -->|Oui| H
+    K -->|Non| J
+    
+    H -->|Après Max Check Attempts| I[État HARD<br/>Notification]
+    
+    I -->|Email/SMS/Ticket| L[Exploitant]
+    
+    L -->|Intervention| M[Correction]
+    M -->|Rétablissement| A
+    
+    subgraph N[Tableaux de bord]
+        O[Widgets<br/>Vues tactiques<br/>Top 10 CPU/RAM]
+        P[Rapports disponibilité<br/>Camemberts]
+        Q[KPI / MTBF / MTRS<br/>CSAT / NPS]
+    end
+    
+    F --> N
+                    </div>
+                </div>
+                <p>Ce diagramme montre les <span class="concept-key">quatre couches fonctionnelles</span> : source (hôtes), collecte (protocoles), traitement (Centreon), exploitation (tableaux de bord, KPI). La boucle de régulation s'établit de l'alerte à l'intervention humaine.</p>
+            </section>
+
+            <!-- Section Architecture -->
+            <section id="architecture" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Fondamentaux</span>
+                    <h2>1️⃣ Architecture Conceptuelle Fondamentale</h2>
+                </div>
+                <p>La supervision informatique est la discipline qui assure <span class="concept-key">la visibilité continue sur l'état de santé</span> d'une infrastructure. Elle répond à trois finalités :</p>
+                <ul>
+                    <li><strong>Détection</strong> : identifier immédiatement les défaillances (panne, saturation, indisponibilité)</li>
+                    <li><strong>Anticipation</strong> : prévoir les évolutions nécessaires via l'analyse des tendances (capacity planning)</li>
+                    <li><strong>Reporting</strong> : fournir des indicateurs objectifs aux parties prenantes (DSI, direction, fournisseurs)</li>
+                </ul>
+                <h3>Positionnement dans les modèles de référence</h3>
+                <ul>
+                    <li><strong>OSI</strong> : Couche 7 (Application) pour SNMP, Syslog ; Couches 3-4 pour Netflow</li>
+                    <li><strong>TCP/IP</strong> : Couche Application (SNMP, Syslog) et analyse du trafic (Netflow)</li>
+                    <li><strong>ITIL</strong> : Gestion des incidents, gestion des capacités, gestion de la disponibilité</li>
+                    <li><strong>Zero Trust</strong> : Vérification continue de l'état des ressources, logs centralisés</li>
+                </ul>
+                <h3>Frontières et interfaces</h3>
+                <ul>
+                    <li><strong>En amont</strong> : L'infrastructure supervisée (hôtes, équipements réseau, applications, imprimantes, scanners, caméras IP)</li>
+                    <li><strong>En aval</strong> : Les exploitants (notifications), les décideurs (rapports), les systèmes de ticketing (GLPI)</li>
+                    <li><strong>Interfaces transverses</strong> : Centralisation des logs (ELK, Splunk, Graylog) pour corrélation avec alertes</li>
+                </ul>
+                <h3>Principes philosophiques directeurs</h3>
+                <ul>
+                    <li><strong>"Fail-secure"</strong> : En cas de panne du superviseur, l'infrastructure continue de fonctionner</li>
+                    <li><strong>"Least privilege"</strong> : Communautés SNMP en lecture seule par défaut ; SNMPv3 avec authentification et chiffrement</li>
+                    <li><strong>"Noise reduction"</strong> : Gestion du flapping, dépendances parents-enfants, seuils adaptés</li>
+                    <li><strong>"Context is king"</strong> : Une alerte sans contexte est un bruit ; les logs centralisés apportent le contexte</li>
+                    <li><strong>"Proactive before reactive"</strong> : L'analyse des tendances prime sur la détection d'incidents</li>
+                </ul>
+            </section>
+
+            <!-- Section Mécanismes -->
+            <section id="mecanismes" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Fonctionnement Causal</span>
+                    <h2>2️⃣ Mécanismes Internes Détaillés — La Machinerie</h2>
+                </div>
+
+                <h3 id="mecanisme-snmp">A. Collecte SNMP par requête (Get/GetBulk/GetNext)</h3>
+                <div class="mermaid-diagram">
+                    <div class="mermaid">
+sequenceDiagram
+    participant Manager as Manager SNMP
+    participant Agent as Agent SNMP (hôte)
+    Manager->>Agent: GetRequest (communauté "SRV")<br/>OID: 1.3.6.1.2.1.2.2.1.8.24
+    Agent-->>Manager: GetResponse (valeur: 1 = UP)
+    Manager->>Manager: Compare seuils, met à jour état
+                    </div>
+                </div>
+                <p><strong>PDU (Protocol Data Unit) types</strong> : 0=GetRequest, 1=GetNextRequest, 2=SetRequest, 3=GetResponse, 4=Trap.</p>
+                <p><strong>Erreurs SNMP</strong> : NoAccess, WrongLength, WrongValue, WrongType, WrongEncoding, NoCreation, ReadOnly, NoWritable, AuthorisationError.</p>
+
+                <h3 id="mecanisme-traps">B. Notifications asynchrones (Traps SNMP)</h3>
+                <p><strong>Avantage</strong> : Optimise la consommation réseau, n'alerte qu'en cas de dysfonctionnement.<br/>
+                <strong>Inconvénient</strong> : En cas de panne réseau, le manager n'a pas l'information.</p>
+
+                <h3 id="mecanisme-soft-hard">C. Gestion des états SOFT / HARD</h3>
+                <p><strong>Max Check Attempts</strong> = nombre de vérifications avant confirmation.<br/>
+                <strong>Retry Check Interval</strong> = intervalle entre les vérifications.<br/>
+                Exemple : Max Check Attempts=3, Retry Check Interval=1 min → notification après 3 minutes d'état persistant.</p>
+
+                <h3 id="mecanisme-flapping">D. Flapping (bagotage)</h3>
+                <p>Pourcentage de changements d'état sur les 21 derniers checks. Seuil haut déclenche le flapping, seuil bas le termine. Évite la tempête d'alertes sur services instables.</p>
+
+                <h3 id="mecanisme-parents">E. Dépendances parents-enfants (Network Outage)</h3>
+                <p>Si un parent est DOWN, les hôtes enfants sont marqués UNREACHABLE. Seul le parent génère une notification, évitant une cascade inutile.</p>
+            </section>
+
+            <!-- Section Protocoles -->
+            <section id="protocoles" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Éléments du Système</span>
+                    <h2>3️⃣ Protocoles, Standards & Outils — L'Exhaustivité Technique</h2>
+                </div>
+
+                <h3>3.1 Syslog — Protocole de journalisation système</h3>
+                <ul>
+                    <li><strong>Objectif</strong> : Transmettre des messages de journalisation vers un serveur central</li>
+                    <li><strong>Port</strong> : UDP 514 (par défaut)</li>
+                    <li><strong>Structure</strong> : PRI (facility + severity) + HEADER + MSG</li>
+                    <li><strong>Facilities</strong> : 0=kern, 1=user, 2=mail, 3=daemon, 4=auth, 5=syslog, 6=lpr, 7=news, 8=uucp, 9=cron, 10=authpriv, 11=ftp, 12=ntp, 13=security, 14=console, 15=solaris-cron, 16-23=local0-local7</li>
+                    <li><strong>Severities</strong> : 0=Emergency, 1=Alert, 2=Critical, 3=Error, 4=Warning, 5=Notice, 6=Informational, 7=Debug</li>
+                    <li><strong>Limites</strong> : Pas d'authentification, pas de chiffrement, vulnérable aux attaques replay</li>
+                </ul>
+
+                <h3>3.2 Netflow — Protocole d'analyse de flux réseau</h3>
+                <ul>
+                    <li><strong>Origine</strong> : Cisco Systems, port UDP 2055</li>
+                    <li><strong>Versions</strong> : v5 (IPv4 courante), v9 (templates, IPv6, MPLS, BGP), v10 (IPFIX standard IETF)</li>
+                    <li><strong>5-tuple</strong> : IP source, IP destination, port source, port destination, protocole</li>
+                    <li><strong>Dérivés</strong> : Jflow (Juniper), Cflowd (Alcatel-Lucent), NetStream (HP/Huawei)</li>
+                </ul>
+
+                <h3>3.3 sFlow — Flux échantillonné</h3>
+                <ul>
+                    <li><strong>Origine</strong> : InMon Corporation</li>
+                    <li><strong>Principe</strong> : Échantillonnage aléatoire des paquets (couches 2 à 7)</li>
+                    <li><strong>Différence Netflow</strong> : Pas de stockage sur l'équipement, transmission immédiate</li>
+                </ul>
+
+                <h3>3.4 SNMP — Simple Network Management Protocol</h3>
+                <ul>
+                    <li><strong>Couche OSI</strong> : 7 (Application), ports UDP 161 (requêtes) et 162 (Traps)</li>
+                    <li><strong>Versions</strong> : v1 (communauté en clair), v2c (GetBulk), v3 (authentification MD5/SHA, chiffrement DES/AES)</li>
+                    <li><strong>MIB</strong> : Base de données hiérarchique des objets gérés</li>
+                    <li><strong>OID</strong> : Identifiant unique d'un objet (ex: 1.3.6.1.2.1.2.2.1.8 = ifOperStatus)</li>
+                </ul>
+                <div class="command">
+                    # Test SNMP ligne de commande<br/>
+                    snmpget -v2c -c demo 192.168.1.169 sysDescr.0<br/>
+                    # Options: -v version, -c communauté, sysDescr.0 OID description
+                </div>
+
+                <h3>3.5 Centreon — Plateforme de supervision</h3>
+                <ul>
+                    <li><strong>Basé sur</strong> : Nagios, open source (version standard)</li>
+                    <li><strong>Installation VM</strong> : téléchargement site officiel, import Virtualbox, config réseau 10.0.20.0/24, timezone Europe/Paris</li>
+                    <li><strong>Ajout hôte Linux</strong> : installer snmpd, configurer /etc/snmp/snmpd.conf (agentAddress udp:161, rocommunity demo, view all)</li>
+                    <li><strong>Ajout hôte Windows</strong> : activer Service SNMP dans fonctionnalités, configurer communauté "demo" lecture seule, autoriser IP superviseur</li>
+                    <li><strong>Groupes d'hôtes</strong> : standardisation des services communs (CPU, mémoire, disque, réseau)</li>
+                    <li><strong>Export configuration</strong> : Pollers → Central → Generate/Run/Move/Restart</li>
+                </ul>
+                <div class="command">
+                    # Configuration SNMP Debian<br/>
+                    apt update && apt install libsnmp-dev snmpd<br/>
+                    nano /etc/snmp/snmpd.conf<br/>
+                    rocommunity demo default -V all<br/>
+                    systemctl restart snmpd
+                </div>
+
+                <h3>3.6 Seuils d'alerte</h3>
+                <ul>
+                    <li><strong>Valeurs par défaut</strong> : CPU Warning=80%, Critical=90%</li>
+                    <li><strong>Modification</strong> : Configuration → Services → Services by host → Custom macros (WARNING, CRITICAL)</li>
+                    <li><strong>Enjeux</strong> : Seuils trop bas = tempête d'alertes ; seuils trop hauts = détection tardive</li>
+                </ul>
+
+                <h3>3.7 Centralisation des journaux</h3>
+                <ul>
+                    <li><strong>Outils</strong> : ELK Stack, Splunk, Graylog</li>
+                    <li><strong>Avantages</strong> : Corrélation des données, analyse approfondie, diagnostic avancé, conformité et sécurité</li>
+                </ul>
+
+                <h3>3.8 Tableaux de bord Centreon</h3>
+                <ul>
+                    <li><strong>Widgets</strong> : Vues tactiques, Top 10 CPU/RAM</li>
+                    <li><strong>Périodes</strong> : 24h, semaine, mois, année, N-1</li>
+                    <li><strong>Indicateurs</strong> : Disponibilité, indisponibilité, injoignable, temps arrêt planifié</li>
+                    <li><strong>Temps significatif</strong> : Pourcentage de fonctionnement réel sur la période</li>
+                    <li><strong>Export</strong> : CSV</li>
+                </ul>
+
+                <h3>3.9 KPI et Objectifs SMART</h3>
+                <ul>
+                    <li><strong>MTBF</strong> (Mean Time Between Failures) : Temps moyen entre les pannes</li>
+                    <li><strong>MTRS</strong> (Mean Time to Restore Service) : Temps moyen de rétablissement</li>
+                    <li><strong>CSAT</strong> : Score de satisfaction client</li>
+                    <li><strong>NPS</strong> : Net Promoter Score (probabilité de recommandation)</li>
+                    <li><strong>SERVQUAL/RATER</strong> : Reliability, Assurance, Tangibles, Empathy, Responsiveness</li>
+                    <li><strong>SMART</strong> : Spécifique, Mesurable, Acceptable, Réaliste, Temporellement défini</li>
+                </ul>
+                <div class="equation-box">
+                    Taux de fidélisation clientèle = (CE - CN) / CS × 100<br/>
+                    CE = clients fin période, CN = nouveaux clients, CS = clients début période
+                </div>
+            </section>
+
+            <!-- Section Illusions -->
+            <section id="illusions" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Pièges à Éviter</span>
+                    <h2>4️⃣ Illusions Conceptuelles & Pièges Opérationnels — La Sagesse Négative</h2>
+                </div>
+
+                <div class="illusion-box">
+                    <h4>Illusion n°1 : "SNMP me donne une vision complète de mon infrastructure"</h4>
+                    <p><strong>Pourquoi elle est séduisante</strong> : SNMP est présent nativement sur la plupart des équipements.</p>
+                    <p><strong>Pourquoi elle est fausse</strong> : SNMP ne remonte que des informations sommaires (CPU, mémoire, disques). Impossible d'aller en profondeur sur les applications sans agent spécifique.</p>
+                    <p><strong>Modèle correct</strong> : Combiner SNMP avec des agents propriétaires et une centralisation des logs.</p>
+                </div>
+
+                <div class="illusion-box">
+                    <h4>Illusion n°2 : "Le superviseur me notifie immédiatement en cas de panne"</h4>
+                    <p><strong>Pourquoi elle est séduisante</strong> : La réactivité est l'objectif affiché.</p>
+                    <p><strong>Pourquoi elle est fausse</strong> : État SOFT nécessite plusieurs vérifications (Max Check Attempts). Les Traps UDP peuvent être perdus.</p>
+                    <p><strong>Modèle correct</strong> : Combiner requêtes périodiques et Traps pour détecter l'indisponibilité même en cas de perte.</p>
+                </div>
+
+                <div class="illusion-box">
+                    <h4>Illusion n°3 : "Baisser les seuils d'alerte me rend plus réactif"</h4>
+                    <p><strong>Pourquoi elle est séduisante</strong> : Logique quantitative : seuil bas = alerte précoce.</p>
+                    <p><strong>Pourquoi elle est fausse</strong> : Seuil CPU à 20% sur serveur tournant à 30% → alerte permanente. Tempête d'alertes → alerte fatigue.</p>
+                    <p><strong>Modèle correct</strong> : Calibrer les seuils sur l'historique de fonctionnement normal.</p>
+                </div>
+
+                <div class="illusion-box">
+                    <h4>Illusion n°4 : "Mon superviseur me dit que l'hôte est DOWN, donc la machine est éteinte"</h4>
+                    <p><strong>Pourquoi elle est séduisante</strong> : Le statut DOWN semble explicite.</p>
+                    <p><strong>Pourquoi elle est fausse</strong> : Adresse IP mal configurée, pare-feu bloquant ICMP, agent SNMP désactivé, communauté mal orthographiée, machine parente DOWN.</p>
+                    <p><strong>Modèle correct</strong> : Vérifier IP, ping, service SNMP, communauté, hiérarchie parents-enfants.</p>
+                </div>
+
+                <div class="illusion-box">
+                    <h4>Illusion n°5 : "Syslog est sécurisé par nature"</h4>
+                    <p><strong>Pourquoi elle est séduisante</strong> : Protocole standardisé.</p>
+                    <p><strong>Pourquoi elle est fausse</strong> : Aucune authentification, aucun chiffrement, vulnérabilité replay.</p>
+                    <p><strong>Modèle correct</strong> : Utiliser Syslog avec VPN ou syslog-over-TLS (RFC 5425).</p>
+                </div>
+            </section>
+
+            <!-- Section Raisonnement -->
+            <section id="raisonnement" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Méthode Expert</span>
+                    <h2>5️⃣ Raisonnement de l'Expert Senior — Pensée Systémique Appliquée</h2>
+                </div>
+
+                <h3>Chaînes causales : anticiper les impacts seconds</h3>
+                <ul>
+                    <li><strong>Ajout d'un serveur sur un switch</strong> : Impact direct = nouvel hôte ; Impact second = héritage des dépendances ; Impact tertiaire = charge CPU du superviseur</li>
+                    <li><strong>Baisse des seuils d'alerte</strong> : Plus d'alertes → risque d'alerte fatigue → seuils à remonter après analyse</li>
+                </ul>
+
+                <h3>Diagnostic par hypothèses réfutables</h3>
+                <p><strong>Symptôme</strong> : Hôte DOWN alors que machine allumée.</p>
+                <ol>
+                    <li>Hypothèse 1 : Mauvaise IP → vérifier configuration vs ipconfig</li>
+                    <li>Hypothèse 2 : Pare-feu bloquant ICMP → tester ping</li>
+                    <li>Hypothèse 3 : Agent SNMP désactivé → tester snmpget, vérifier service</li>
+                    <li>Action : démarrer service SNMP → vérifier retour UP</li>
+                </ol>
+
+                <h3>Lire les signaux faibles</h3>
+                <ul>
+                    <li><strong>Augmentation progressive CPU sur 3 mois (20%→60%)</strong> : Ce n'est pas un incident mais une tendance. Planifier mise à niveau avant 80%.</li>
+                    <li><strong>Nombre d'intrusions sur firewall élevé sur 30 jours</strong> : Renforcer la sécurité (règles, filtrage).</li>
+                </ul>
+
+                <h3>Décisions sous contraintes</h3>
+                <ul>
+                    <li><strong>Budget limité</strong> : Prioriser hôtes critiques pour supervision avancée</li>
+                    <li><strong>Personnel limité</strong> : Automatiser notifications, utiliser groupes d'hôtes</li>
+                    <li><strong>Infrastructure hétérogène</strong> : Privilégier SNMP (universel)</li>
+                    <li><strong>Sécurité stricte</strong> : SNMPv3, communautés non par défaut, VLAN dédié</li>
+                </ul>
+            </section>
+
+            <!-- Section Synthèse -->
+            <section id="synthese" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">À Retenir Absolument</span>
+                    <h2>6️⃣ Synthèse Mémorisable Long Terme — Le Code Mental</h2>
+                </div>
+
+                <h3>Lois invariantes du domaine</h3>
+                <div class="law-box">
+                    <p><strong>Loi de la non-répudiation</strong> : Toute alerte non confirmée (SOFT) n'est pas une vérité.</p>
+                    <p><strong>Loi de la chaîne de dépendance</strong> : Un parent DOWN rend ses enfants UNREACHABLE.</p>
+                    <p><strong>Loi de la tolérance au bruit</strong> : Trop d'alertes tuent l'alerte (alerte fatigue).</p>
+                    <p><strong>Loi du contexte</strong> : Un log sans supervision est aveugle ; une supervision sans log est muette.</p>
+                    <p><strong>Loi de l'évolution</strong> : Les seuils d'aujourd'hui ne sont pas ceux de demain (réviser périodiquement).</p>
+                </div>
+
+                <h3>Équations mentales</h3>
+                <div class="equation-box">
+                    Disponibilité réelle = (Uptime / Temps total) × 100%<br/>
+                    MTBF = Temps total de fonctionnement / Nombre d'incidents<br/>
+                    MTRS = Somme des durées de réparation / Nombre d'incidents<br/>
+                    Sécurité SNMP = SNMPv3 × (Communauté non défaut) × Filtrage IP<br/>
+                    Tempête d'alertes = Nombre d'hôtes × (Seuil trop bas) / (Flapping non géré)
+                </div>
+
+                <h3>Checklists cognitives</h3>
+                <p><strong>Avant d'ajouter un hôte</strong> : IP statique, agent SNMP activé, communauté identique, pare-feu UDP 161, template adapté, groupe d'hôtes associé, parent défini.</p>
+                <p><strong>Lors d'une alerte</strong> : État SOFT/HARD ? Dépendances parents-enfants ? Flapping ? Seuils adaptés ? Agent répond ? Logs contextuels ?</p>
+                <p><strong>Pour un reporting annuel</strong> : Tableau de bord par groupe, comparaison N vs N-1, MTBF/MTRS, graphiques, corrélation incidents.</p>
+
+                <h3>Rappel de l'analogie</h3>
+                <div class="analogy-box">
+                    <p>Le système immunitaire numérique doit être : <strong>réactif</strong> (détecter les intrusions), <strong>préventif</strong> (anticiper les épidémies), <strong>mémoriel</strong> (conserver l'historique), <strong>communicant</strong> (bilans de santé compréhensibles). Un système immunitaire défaillant est pire qu'aucun.</p>
+                </div>
+            </section>
+
+            <!-- Section Extension -->
+            <section id="extension" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Perspectives</span>
+                    <h2>7️⃣ Extension Au-delà du Corpus (500%+)</h2>
+                </div>
+
+                <h3>Concepts adjacents indispensables</h3>
+                <ul>
+                    <li><strong>Observabilité vs Supervision</strong> : Supervision = collecte passive ; Observabilité = capacité à interroger en profondeur (tracing, logs structurés)</li>
+                    <li><strong>DEM (Digital Experience Management)</strong> : Mesure de l'expérience utilisateur réelle, corrélation avec métriques infrastructure</li>
+                    <li><strong>ITIL</strong> : Incident Management, Problem Management, Change Management, Capacity Management</li>
+                </ul>
+
+                <h3>Évolution future et tendances</h3>
+                <ul>
+                    <li><strong>Supervision en mode SaaS</strong> : Maîtrise des coûts initiaux, mise à jour automatique</li>
+                    <li><strong>Observabilité unifiée</strong> : logs, métriques, traces dans une seule plateforme (Grafana Loki + Prometheus + Tempo)</li>
+                    <li><strong>IAOps</strong> : Détection automatique d'anomalies par apprentissage, réduction de la charge d'alertes</li>
+                    <li><strong>Green IT</strong> : Supervision de la consommation énergétique des équipements</li>
+                    <li><strong>Supervision des environnements cloud-native</strong> : Kubernetes, containers, serverless</li>
+                </ul>
+
+                <h3>Liens vers d'autres disciplines</h3>
+                <ul>
+                    <li><strong>Développement</strong> : Instrumentation des applications pour exporter métriques (Prometheus client)</li>
+                    <li><strong>Hardware</strong> : Capteurs physiques (température, humidité) supervisés via SNMP</li>
+                    <li><strong>Droit/Conformité</strong> : Conservation des logs (RGPD, ISO 27001), preuve de disponibilité (SLA)</li>
+                    <li><strong>Économie</strong> : ROI de la supervision : coût des incidents évités vs coût de la plateforme</li>
+                </ul>
+            </section>
+
+            <!-- Section Objectifs -->
+            <section id="objectifs" class="module-section">
+                <div class="section-header">
+                    <span class="section-tag">Finalité</span>
+                    <h2>🎯 Objectifs Cognitifs Finaux — Maîtrise Complète de la Supervision IT</h2>
+                </div>
+                <div class="cognitive-objectives">
+                    <p>À la fin de ce module, vous ne voyez plus la supervision comme une simple collecte de données, mais comme une <span class="concept-key">architecture systémique de résilience</span>. Vous comprenez simultanément :</p>
+                    <ul>
+                        <li>Les protocoles de collecte (SNMP, Syslog, Netflow) et leurs limites intrinsèques</li>
+                        <li>Les mécanismes de traitement (seuils, flapping, dépendances, états SOFT/HARD)</li>
+                        <li>Les outils d'exploitation (Centreon, tableaux de bord, KPI, centralisation des logs)</li>
+                        <li>Les illusions conceptuelles qui piègent les administrateurs débutants</li>
+                        <li>La méthodologie de diagnostic par hypothèses réfutables</li>
+                        <li>La capacité à anticiper les évolutions par l'analyse des tendances</li>
+                    </ul>
+
+                    <br>
+                    <h3>Vous devez pouvoir dire, sans hésitation :</h3>
+                    <ul>
+                        <li>« Je vois la boucle complète : hôte → agent SNMP → poller → seuil → notification → intervention »</li>
+                        <li>« Je sais diagnostiquer un hôte DOWN en vérifiant IP, ping, service SNMP, communauté et dépendances »</li>
+                        <li>« Je comprends pourquoi baisser les seuils peut créer une tempête d'alertes »</li>
+                        <li>« Je sais configurer un groupe d'hôtes pour standardiser la supervision »</li>
+                        <li>« Je peux expliquer la différence entre un état SOFT et HARD, et pourquoi le flapping est important »</li>
+                        <li>« Mon niveau de compréhension dépasse 500% d'une formation supervision standard »</li>
+                        <li>« Quand un service passe en CRITICAL, je sais exactement où regarder et pourquoi »</li>
+                    </ul>
+
+                    <br>
+                    <p><strong>Votre nouveau superpouvoir</strong> : Vous ne recevez plus passivement des alertes. Vous dansez avec la complexité de l'infrastructure, vous comprenez ses limitations fondamentales, et vous pouvez expliquer sa santé tout en connaissant ses fragilités. Vous êtes désormais parmi le 1% qui comprend vraiment comment la supervision transforme une infrastructure chaotique en système maîtrisé.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="page-footer">
+        <p>Module Académique : Télémétrie Systémique et Supervision d'Infrastructure — Reconstruction pour la Maîtrise Expert 500%+</p>
+        <p>© Format pédagogique HTML — Contenu figé et validé.</p>
+    </footer>
+
+    <script>
+        // Script pour la navigation mobile et le suivi des sections actives
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger-btn');
+            const mainMenu = document.getElementById('main-menu');
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            const mainNavLinks = document.querySelectorAll('.nav-menu a');
+
+            // Gestion du menu hamburger
+            hamburger.addEventListener('click', function() {
+                mainMenu.classList.toggle('active');
+            });
+
+            // Fermer le menu mobile en cliquant sur un lien
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainMenu.classList.contains('active')) {
+                        mainMenu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Suivi de la section active (scroll)
+            const sections = document.querySelectorAll('.module-section');
+            const navLi = document.querySelectorAll('.sidebar-nav a, .nav-menu a');
+
+            function setActiveSection() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 150;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLi.forEach(li => {
+                    li.classList.remove('active', 'active-section');
+                    if (li.getAttribute('href') === `#${current}`) {
+                        li.classList.add('active', 'active-section');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', setActiveSection);
+            // Initialiser l'état actif au chargement
+            setActiveSection();
+        });
+    </script>
+</body>
+</html>
